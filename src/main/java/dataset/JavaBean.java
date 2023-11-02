@@ -26,6 +26,8 @@ public class JavaBean {
         private String english;
         private String french;
 
+        public Number(){};
+
         public Number(int i, String english, String french) {
             this.i = i;
             this.english = english;
@@ -57,6 +59,23 @@ public class JavaBean {
         }
     }
 
+
+     public static class Str implements Serializable {
+        private String english;
+
+        public Str(String a){
+            this.english = a;
+        }
+
+        public String getEnglish() {
+            return english;
+        }
+
+        public void setEnglish(String english) {
+            this.english = english;
+        }
+    }
+
     public static void main(String[] args) {
         SparkSession spark = SparkSession
             .builder()
@@ -82,11 +101,16 @@ public class JavaBean {
         //
         Dataset<Number> ds = spark.createDataset(data, numberEncoder);
 
+        Dataset<Str> ds2 = ds.map( num -> new Str(num.getEnglish()),Encoders.bean(Str.class) );
+
         System.out.println("*** here is the schema inferred from the bean");
         ds.printSchema();
+        ds2.printSchema();
 
         System.out.println("*** here is the data");
-        ds.show();
+        ds2.show();
+
+        ///ds2.show();
 
         // Use the convenient bean-inferred column names to query
         System.out.println("*** filter by one column and fetch others");
