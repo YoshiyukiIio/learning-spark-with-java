@@ -101,6 +101,14 @@ public class JavaBean {
         //
         Dataset<Number> ds = spark.createDataset(data, numberEncoder);
 
+        ds.count();
+
+        ds.show();
+        ds.show();
+        ds.show();
+        ds.show();
+        ds.show();
+
         Dataset<Str> ds2 = ds.map( num -> new Str(num.getEnglish()),Encoders.bean(Str.class) );
 
         System.out.println("*** here is the schema inferred from the bean");
